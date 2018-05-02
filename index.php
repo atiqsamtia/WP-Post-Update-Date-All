@@ -6,7 +6,7 @@
  * Author: Atiq Samtia
  * Author URI: http://atiqsamtia.com
  * Plugin URI: https://github.com/atiqsamtia/WP-Post-Update-Date-All
- * Text Domain: tb-post-update-all
+ * Text Domain: bulk-post-update-date
  * Domain Path: /languages
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -27,13 +27,13 @@
 */
 
 
-function tb_post_update_all_menu() {
-	add_options_page( 'Bulk Post Update Date', 'Bulk Post Update Date', 'manage_options', 'tb-post-update-all', 'tb_post_update_all_options' );
+function bulk_post_update_date_menu() {
+	add_options_page( 'Bulk Post Update Date', 'Bulk Post Update Date', 'manage_options', 'bulk-post-update-date', 'bulk_post_update_date_options' );
 }
 
-add_action( 'admin_menu', 'tb_post_update_all_menu' );
+add_action( 'admin_menu', 'bulk_post_update_date_menu' );
 
-function tb_post_update_all_options() {
+function bulk_post_update_date_options() {
 
 	$settings_saved = 0;
 
@@ -74,14 +74,14 @@ function tb_post_update_all_options() {
 	?>
 
 	<div class="wrap">
-		<h1><?php _e( 'Bulk Post Update Date', 'tb-post-update-all' ); ?></h1>
+		<h1><?php _e( 'Bulk Post Update Date', 'bulk-post-update-date' ); ?></h1>
 		<?php if ( $settings_saved > 0 ) : ?>
 			<div id="message" class="updated fade">
 				<p><strong><?php _e( "$settings_saved Posts Update date refreshed." ) ?></strong></p>
 			</div>
 		<?php endif ?>
 		<h2>
-			<?php _e( 'refresh the post modified date for all of your articles in one click, click REFRESH now', 'tb-post-update-all' ) ?>
+			<?php _e( 'refresh the post modified date for all of your articles in one click, click REFRESH now', 'bulk-post-update-date' ) ?>
 		</h2>
 		<form method="post" action="">
 			<div>
