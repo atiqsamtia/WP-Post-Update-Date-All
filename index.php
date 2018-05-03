@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: Bulk Post Update Date
- * Version: 1.0.0
+ * Version: 1.0.1
  * Description: Change the Post Update date for all posts in one click. This will help your blog in search engines and your blog will look alive. Do this every week or month. (Tip By Waqas Jawed in Bloggers Funda - facebook group)
  * Author: Atiq Samtia
  * Author URI: http://atiqsamtia.com
@@ -34,7 +34,7 @@ function bulk_post_update_date_menu() {
 add_action( 'admin_menu', 'bulk_post_update_date_menu' );
 
 function bulk_post_update_date_options() {
-
+    global $wpdb;
 	$settings_saved = 0;
 
 	if ( isset( $_POST[ 'do' ] ) ) {
@@ -60,13 +60,14 @@ function bulk_post_update_date_options() {
             $time = $time - $seconds;
             $time = date("Y-m-d H:i:s",$time);
 
-            wp_update_post(
-                array (
-                    'ID'            => $id,
-                    'post_modified_date'     => $time,
-                    'post_modified_date_gmt' => get_gmt_from_date( $time )
-                )
-            );
+            $wpdb->query(
+                $wpdb->prepare(
+                    "UPDATE $wpdb->posts SET post_modified='%s', post_modified_gmt='%s' WHERE ID = %d",
+                     $time,
+                     get_gmt_from_date($time),
+                     $id
+                    )
+                );   
         }
         $settings_saved = count($ids);
 	}
