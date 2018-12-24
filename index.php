@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: Bulk Post Update Date
- * Version: 1.1.0
+ * Version: 1.1.2
  * Description: Change the Post Update date for all posts in one click. This will help your blog in search engines and your blog will look alive. Do this every week or month. (Tip By Waqas Jawed in Bloggers Funda - facebook group)
  * Author: Atiq Samtia
  * Author URI: http://atiqsamtia.com
@@ -37,6 +37,9 @@ function bulk_post_update_date_options() {
     global $wpdb;
 	$settings_saved = 0;
 
+	$now = current_time( 'timestamp', 0 );;
+
+
 	if ( isset( $_POST[ 'tb_refresh' ] ) && wp_verify_nonce( $_POST['tb_refresh'],'tb-refresh' ) && current_user_can( 'manage_options' ) ) {
 
         // get All posts IDs
@@ -55,15 +58,15 @@ function bulk_post_update_date_options() {
         );
 
         $from = $_POST['distribute'];
-        $to = time();
+        $to = current_time( 'timestamp', 0 );
 
         if($from == 0){
             $range = explode( '-',$_POST['range']);
             if(count( $range) == 2){
-                    $from = strtotime( $range[0]);
-                    $to = strtotime( $range[1]);
+                    $from = strtotime( $range[0],$now);
+                    $to = strtotime( $range[1],$now);
             } else {
-                $from = strtotime( '-3 hours');
+                $from = strtotime( '-3 hours',$now);
             }
         }
 
@@ -117,13 +120,13 @@ function bulk_post_update_date_options() {
                     <td>
 
                         <select type="text" id="distribute" name="distribute">
-                            <option value="<?php echo strtotime( '-1 hour');?>">1 hour</option>
-                            <option value="<?php echo strtotime( '-1 day');?>">1 Day</option>
-                            <option value="<?php echo strtotime( '-15 days');?>">15 Days</option>
-                            <option value="<?php echo strtotime( '-1 month');?>">1 Month</option>
-                            <option value="<?php echo strtotime( '-2 month');?>">2 Months</option>
-                            <option value="<?php echo strtotime( '-3 month');?>">3 Months</option>
-                            <option value="<?php echo strtotime( '-6 month');?>">6 Months</option>
+                            <option value="<?php echo strtotime( '-1 hour',$now);?>">1 hour</option>
+                            <option value="<?php echo strtotime( '-1 day',$now);?>">1 Day</option>
+                            <option value="<?php echo strtotime( '-15 days',$now);?>">15 Days</option>
+                            <option value="<?php echo strtotime( '-1 month',$now);?>">1 Month</option>
+                            <option value="<?php echo strtotime( '-2 month',$now);?>">2 Months</option>
+                            <option value="<?php echo strtotime( '-3 month',$now);?>">3 Months</option>
+                            <option value="<?php echo strtotime( '-6 month',$now);?>">6 Months</option>
                             <option value="0">Custom Range</option>
                         </select>
                         <p class="description">
@@ -135,7 +138,7 @@ function bulk_post_update_date_options() {
                     <th scope="row"><label for="range">Custom Date Range</label></th>
                     <td>
 
-                        <input type="text" id="range" name="range" value="<?php echo date('m/d/y',strtotime( '-3 days'));?> - <?php echo date('m/d/y');?>" />
+                        <input type="text" id="range" name="range" value="<?php echo date('m/d/y',strtotime( '-3 days',$now));?> - <?php echo date('m/d/y',$now);?>" />
                         <p class="description">
                             Select range of date in which you want to spread the dates of posts to look more realistic.
                         </p>
@@ -151,7 +154,7 @@ function bulk_post_update_date_options() {
 		                    <?php
 		                    $args       = array(
 			                    'orderby' => 'name',
-                                'exclude' => '1'
+                               // 'exclude' => '1'
 		                    );
 		                    $categories = get_categories( $args );
 		                    foreach ( $categories as $category ) { ?>

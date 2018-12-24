@@ -44,6 +44,8 @@ Yes, I would love to. You can contact me via my website or my donation page.
 * Added support for custom interval
 * Added support for custom date range
 * Added support for Categories
+=1.1.2=
+* Added support for Uncategorized
 
  == Upgrade Notice ==
 None
