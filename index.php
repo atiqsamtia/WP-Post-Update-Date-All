@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: Bulk Post Update Date
- * Version: 1.1.2
+ * Version: 1.1.3
  * Description: Change the Post Update date for all posts in one click. This will help your blog in search engines and your blog will look alive. Do this every week or month. (Tip By Waqas Jawed in Bloggers Funda - facebook group)
  * Author: Atiq Samtia
  * Author URI: http://atiqsamtia.com
@@ -102,7 +102,7 @@ function bulk_post_update_date_options() {
 		<h1><?php _e( 'Bulk Post Update Date', 'bulk-post-update-date' ); ?></h1>
 		<?php if ( $settings_saved > 0 ) : ?>
 			<div id="message" class="updated fade">
-				<p><strong><?php _e( "$settings_saved Posts Update date refreshed." ) ?></strong></p>
+				<p><strong><?php _e( "$settings_saved Posts Update date refreshed.", 'bulk-post-update-date' ) ?></strong></p>
 			</div>
 		<?php endif ?>
 		<p>
@@ -116,37 +116,37 @@ function bulk_post_update_date_options() {
             <table class="form-table">
 
                 <tr valign="top">
-                    <th scope="row"><label for="distribute">Distribute into Last</label></th>
+                    <th scope="row"><label for="distribute"><?php _e( 'Distribute into Last', 'bulk-post-update-date' ); ?></label></th>
                     <td>
 
                         <select type="text" id="distribute" name="distribute">
-                            <option value="<?php echo strtotime( '-1 hour',$now);?>">1 hour</option>
-                            <option value="<?php echo strtotime( '-1 day',$now);?>">1 Day</option>
-                            <option value="<?php echo strtotime( '-15 days',$now);?>">15 Days</option>
-                            <option value="<?php echo strtotime( '-1 month',$now);?>">1 Month</option>
-                            <option value="<?php echo strtotime( '-2 month',$now);?>">2 Months</option>
-                            <option value="<?php echo strtotime( '-3 month',$now);?>">3 Months</option>
-                            <option value="<?php echo strtotime( '-6 month',$now);?>">6 Months</option>
+                            <option value="<?php echo strtotime( '-1 hour',$now);?>"><?php _e( '1 hour', 'bulk-post-update-date' ); ?></option>
+                            <option value="<?php echo strtotime( '-1 day',$now);?>"><?php _e( '1 Day', 'bulk-post-update-date' ); ?></option>
+                            <option value="<?php echo strtotime( '-15 days',$now);?>"><?php _e( '15 Days', 'bulk-post-update-date' ); ?></option>
+                            <option value="<?php echo strtotime( '-1 month',$now);?>"><?php _e( '1 Month', 'bulk-post-update-date' ); ?></option>
+                            <option value="<?php echo strtotime( '-2 month',$now);?>"><?php _e( '2 Months', 'bulk-post-update-date' ); ?></option>
+                            <option value="<?php echo strtotime( '-3 month',$now);?>"><?php _e( '3 Months', 'bulk-post-update-date' ); ?></option>
+                            <option value="<?php echo strtotime( '-6 month',$now);?>"><?php _e( '6 Months', 'bulk-post-update-date' ); ?></option>
                             <option value="0">Custom Range</option>
                         </select>
                         <p class="description">
-                            Select range of date in which you want to spread the dates of posts to look more realistic.
+                        <?php _e( 'Select range of date in which you want to spread the dates of posts to look more realistic.', 'bulk-post-update-date' ); ?>
                         </p>
                     </td>
                 </tr>
                 <tr id="range_row" valign="top" style="display: none;">
-                    <th scope="row"><label for="range">Custom Date Range</label></th>
+                    <th scope="row"><label for="range"><?php _e( 'Custom Date Range', 'bulk-post-update-date' ); ?></label></th>
                     <td>
 
                         <input type="text" id="range" name="range" value="<?php echo date('m/d/y',strtotime( '-3 days',$now));?> - <?php echo date('m/d/y',$now);?>" />
                         <p class="description">
-                            Select range of date in which you want to spread the dates of posts to look more realistic.
+                        <?php _e( 'Select range of date in which you want to spread the dates of posts to look more realistic.', 'bulk-post-update-date' ); ?>
                         </p>
                     </td>
                 </tr>
 
                 <tr valign="top">
-                    <th scope="row"><label for="categories">Select Categories</label></th>
+                    <th scope="row"><label for="categories"><?php _e( 'Select Categories', 'bulk-post-update-date' ); ?></label></th>
                     <td>
 
                         <select multiple="multiple" id="categories" name="categories[]">
@@ -165,7 +165,7 @@ function bulk_post_update_date_options() {
 		                    <?php } //endforeach ?>
                         </select>
                             <p class="description">
-                            Will apply on all posts if no category is selected. Select multiple categories by holding Ctrl or Command key while selecting.
+                            <?php _e( 'Will apply on all posts if no category is selected. Select multiple categories by holding Ctrl or Command key while selecting.', 'bulk-post-update-date' ); ?>
                         </p>
                     </td>
                 </tr>
@@ -174,7 +174,7 @@ function bulk_post_update_date_options() {
 
 			<p class="submit">
                 <input name="tb_refresh" type="hidden" value="<?php echo wp_create_nonce('tb-refresh'); ?>" />
-				<input class="button-primary" name="do" type="submit" value="<?php _e( 'Update Post Dates' ) ?>" />
+				<input class="button-primary" name="do" type="submit" value="<?php _e( 'Update Post Dates', 'bulk-post-update-date' ) ?>" />
 			</p>
 		</form>
 	</div>

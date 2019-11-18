@@ -3,7 +3,7 @@ Contributors: atiqsamtia
 Tags: posts, update, date, bulk, seo, google
 Donate link: https://www.fiverr.com/atiqsamtia/
 Requires at least: 3.0
-Tested up to: 4.9.8
+Tested up to: 5.3
 Requires PHP: 5.4
 Stable tag: trunk
 License: GPL2
@@ -46,6 +46,8 @@ Yes, I would love to. You can contact me via my website or my donation page.
 * Added support for Categories
 =1.1.2=
 * Added support for Uncategorized
+=1.1.3=
+* Added Translation support
 
  == Upgrade Notice ==
 None
