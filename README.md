@@ -3,7 +3,7 @@
 **Tags:** posts, update, date, bulk, seo, google  
 **Donate link:** https://www.fiverr.com/atiqsamtia/  
 **Requires at least:** 3.0  
-**Tested up to:** 5.3  
+**Tested up to:** 5.9  
 **Requires PHP:** 5.4  
 **Stable tag:** trunk  
 **License:** GPL2  
@@ -33,7 +33,7 @@ After you have installed the plugin, activate the plugin and go to Settings >> B
 ## Frequently Asked Questions 
 
 ###Is it safe to use this plugin?+
-Yes, It is perfectly fine to use this plugin, as it almost emulate the human activity with it's random timestamps
+Yes, It is perfectly fine to use this plugin, as it almost emulate the human activity with it's random timestamps but look for google updates and use it on your own risk
 
 
 ###Can you modify he plugin according to my needs?
@@ -58,3 +58,10 @@ Yes, I would love to. You can contact me via my website or my donation page.
 
 ###1.1.2
 * Added support for Uncategorized
+
+###1.2.0
+* Added support for Pages
+
+
+###1.3.0
+* Update Post published dates as well.
