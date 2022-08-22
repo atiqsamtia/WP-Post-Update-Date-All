@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: Bulk Post Update Date
- * Version: 1.3.0
+ * Version: 1.4.0
  * Description: Change the Post Update date for all posts in one click. This will help your blog in search engines and your blog will look alive. Do this every week or month. (Tip By Waqas Jawed in Bloggers Funda - facebook group)
  * Author: Atiq Samtia
  * Author URI: https://atiq.dev
@@ -39,8 +39,10 @@ function bulk_post_update_date_options() {
     
     $tab = isset($_GET['tab']) ? $_GET['tab'] : 'posts';
 
+    $type = $tab;
+
     //Extra Check for url bug
-    $tab = $tab == 'pages' ? 'pages' : 'posts';
+    $tab = ($tab == 'pages' || $tab == 'posts') ? $tab : 'custom';
 
 	$now = current_time( 'timestamp', 0 );;
 
@@ -55,7 +57,7 @@ function bulk_post_update_date_options() {
 
         $ids = array();
 
-        if($tab == 'posts'){
+        if($type == 'posts'){
 
             $params = array(
 		        'numberposts' => -1,
@@ -71,7 +73,7 @@ function bulk_post_update_date_options() {
                     $params
             );
 
-        } else{
+        } else if($type == 'pages'){
 
             if(isset($_POST['pages'])){
             
@@ -84,6 +86,39 @@ function bulk_post_update_date_options() {
             
             }
 
+        } else {
+            $params = array(
+		        'numberposts' => -1,
+                'post_status' => 'publish',
+		        'fields'        => 'ids',
+                'post_type' => $type
+	        );
+
+            if(isset( $_POST['tax'])){
+
+                foreach($_POST['tax'] as $tax => $terms){
+                    $params['tax_query'][] = array(
+                        'taxonomy' => $tax,
+                        'field' => 'term_id',
+                        'terms' => $terms
+                    );
+                }
+
+                $relation = isset( $_POST['tax_relation']) ? $_POST['tax_relation'] : 'OR';
+                $params['tax_query']['relation'] = $relation;
+
+            }
+
+            // echo '<pre>';
+            // print_r($params);
+            // return;
+
+            $ids = get_posts(
+                    $params
+            );
+
+            // print_r($ids);
+            // return;
         }
 
         $from = $_POST['distribute'];
@@ -148,6 +183,40 @@ function bulk_post_update_date_options() {
         <h2 class="nav-tab-wrapper">
             <a href="?page=bulk-post-update-date&tab=posts" class="nav-tab <?php echo $tab =='posts' ? 'nav-tab-active' : ''; ?>"> <span class="dashicons dashicons-admin-post" style="padding-top: 2px;"></span> <?php _e( 'Posts') ?></a>
             <a href="?page=bulk-post-update-date&tab=pages" class="nav-tab <?php echo $tab =='pages' ? 'nav-tab-active' : ''; ?>"> <span class="dashicons dashicons-admin-page" style="padding-top: 2px;"></span> <?php _e( 'Pages' ) ?></a>
+        
+            <?php
+
+            $args = array(
+                'public'   => true,
+                '_builtin' => false
+            );
+            
+            $output = 'objects'; // 'names' or 'objects' (default: 'names')
+            $operator = 'and'; // 'and' or 'or' (default: 'and')
+            
+            $post_types = get_post_types( $args, $output, $operator );
+            
+            if ( $post_types ) { // If there are any custom public post types.
+            
+            
+                foreach ( $post_types  as $post_type ) {
+                    ?>
+                    <a href="?page=bulk-post-update-date&tab=<?php echo $post_type->name; ?>"
+                    class="nav-tab <?php echo $type == $post_type->name ? 'nav-tab-active' : ''; ?>">
+                    <?php if (strpos($post_type->menu_icon, 'dashicon') !== false){?> 
+                        <span class="dashicons <?php echo $post_type->menu_icon; ?>" style="padding-top: 2px;"></span> 
+                        <?php } else {?>
+                    <img src="<?php echo $post_type->menu_icon; ?>" style="vertical-align: middle;margin-right: 3px;margin-top: -2px;"> 
+                    <?php } ?>
+                    <?php _e( $post_type->label ) ?>
+                </a>
+                <?php }
+            
+            
+            }
+
+            ?>
+        
         </h2>
 
 	
@@ -227,7 +296,7 @@ function bulk_post_update_date_options() {
         </div>
         <span class="coffee-heading">Buy me a coffee!</span>
         <p style="text-align: justify;">Thank you for using <strong>Bulk Post Update Date</strong>. If you found the plugin useful buy me a coffee! Your donation will motivate and make me happy for all the efforts. You can donate via Fiverr.</p>
-        <p style="text-align: justify; font-size: 12px; font-style: italic;">Developed with <span style="color:#e25555;">♥</span> by <a href="https://atiqsamtia.com" target="_blank" style="font-weight: 500;">Atiq Samtia</a> | <a href="https://github.com/atiqsamtia/WP-Post-Update-Date-All" target="_blank" style="font-weight: 500;">GitHub</a> | <a href="https://wordpress.org/support/plugin/bulk-post-update-date" target="_blank" style="font-weight: 500;">Support</a> | <a href="https://translate.wordpress.org/projects/wp-plugins/bulk-post-update-date" target="_blank" style="font-weight: 500;">Translate</a> | <a href="https://wordpress.org/support/plugin/bulk-post-update-date/reviews/?rate=5#new-post" target="_blank" style="font-weight: 500;">Rate it</a> (<span style="color:#ffa000;">★★★★★</span>) on WordPress.org, if you like this plugin.</p>
+        <p style="text-align: justify; font-size: 12px; font-style: italic;">Developed with <span style="color:#e25555;">♥</span> by <a href="https://atiq.dev" target="_blank" style="font-weight: 500;">Atiq Samtia</a> | <a href="https://github.com/atiqsamtia/WP-Post-Update-Date-All" target="_blank" style="font-weight: 500;">GitHub</a> | <a href="https://wordpress.org/support/plugin/bulk-post-update-date" target="_blank" style="font-weight: 500;">Support</a> | <a href="https://translate.wordpress.org/projects/wp-plugins/bulk-post-update-date" target="_blank" style="font-weight: 500;">Translate</a> | <a href="https://wordpress.org/support/plugin/bulk-post-update-date/reviews/?rate=5#new-post" target="_blank" style="font-weight: 500;">Rate it</a> (<span style="color:#ffa000;">★★★★★</span>) on WordPress.org, if you like this plugin.</p>
     </div>
 
     <script>

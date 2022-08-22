@@ -3,7 +3,7 @@ Contributors: atiqsamtia
 Tags: posts, update, date, bulk, seo, google, pages, modified date
 Donate link: https://www.fiverr.com/atiqsamtia/code-or-fix-php-html-css-jquery-mysql-or-wordpress
 Requires at least: 3.0
-Tested up to: 5.9
+Tested up to: 6.0.1
 Requires PHP: 5.4
 Stable tag: trunk
 License: GPL2
@@ -21,6 +21,7 @@ If you update the posts manually, it would require a lot of effort weekly. If yo
 #### Features
 * Update **Posts** Modified date in bulk
 * Update **Pages** Modified date in bulk
+* Update **Any Custom Post Type** dates in bulk
 * It **Randomly** distributes dates so it look realistic in the eyes of search engines
 * Select Custom Interval or Date Range 
 * Apply on posts from **specific categories**
@@ -38,7 +39,7 @@ There are 3 methods to install this plugin
 After you have installed the plugin, activate the plugin and go to Settings >> Bulk Post Update Date and click Update
 
 == Frequently Asked Questions ==
-=Is it safe to use this plugin?+
+=Is it safe to use this plugin?=
 Yes, It is perfectly fine to use this plugin, as it almost emulate the human activity with it's random timestamps but look for google updates and use it on your own risk.
 
 = Is there any admin interface for this plugin? =
@@ -50,9 +51,13 @@ Yes, I would love to. You can contact me via my website or my donation page.
 == Screenshots ==
 1. Apply on Posts
 2. Apply on Pages
+3. Custom Post Type Supported
 
 
 == Changelog ==
+
+= 1.4.0 =
+* Custom Post Types support added.
 
 = 1.2.0 =
 * Update Post published dates as well.
