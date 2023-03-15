@@ -69,6 +69,10 @@ function bulk_post_update_date_options() {
                 $params['cat'] = implode( ',', $_POST['categories']);
             }
 
+            if(isset( $_POST['tags'])){
+                $params['tag'] =  implode( ',', $_POST['tags']);
+            }
+
             $ids = get_posts(
                     $params
             );
