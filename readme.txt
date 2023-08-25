@@ -3,7 +3,7 @@ Contributors: atiqsamtia
 Tags: posts, update, date, bulk, seo, google, pages, modified date
 Donate link: https://www.fiverr.com/atiqsamtia/code-or-fix-php-html-css-jquery-mysql-or-wordpress
 Requires at least: 3.0
-Tested up to: 6.0.1
+Tested up to: 6.3
 Requires PHP: 5.4
 Stable tag: trunk
 License: GPL2
@@ -22,6 +22,7 @@ If you update the posts manually, it would require a lot of effort weekly. If yo
 * Update **Posts** Modified date in bulk
 * Update **Pages** Modified date in bulk
 * Update **Any Custom Post Type** dates in bulk
+* Update **Post Comments** dates in bulk
 * It **Randomly** distributes dates so it look realistic in the eyes of search engines
 * Select Custom Interval or Date Range 
 * Apply on posts from **specific categories**
@@ -55,6 +56,9 @@ Yes, I would love to. You can contact me via my website or my donation page.
 
 
 == Changelog ==
+
+= 1.5.0 =
+* Post Comments date update added.
 
 = 1.4.0 =
 * Custom Post Types support added.
