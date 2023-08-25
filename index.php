@@ -46,114 +46,123 @@ function bulk_post_update_date_options() {
 
 	$now = current_time( 'timestamp', 0 );;
 
+    if(isset($_GET['tab']) && $_GET['tab'] === 'comments'){
+        $type = $tab = 'comments';
+    }
 
 	if ( isset( $_POST[ 'tb_refresh' ] ) && wp_verify_nonce( $_POST['tb_refresh'],'tb-refresh' ) && current_user_can( 'manage_options' ) ) {
 
-        // get All posts IDs
-
-        $field =   $_POST['field'];
-
-        $field =   $field == 'published' ? 'post_date' : 'post_modified';
-
-        $ids = array();
-
-        if($type == 'posts'){
-
-            $params = array(
-		        'numberposts' => -1,
-                'post_status' => 'publish',
-		        'fields'        => 'ids'
-	        );
-
-            if(isset( $_POST['categories'])){
-                $params['cat'] = implode( ',', $_POST['categories']);
-            }
-
-            if(isset( $_POST['tags'])){
-                $params['tag'] =  implode( ',', $_POST['tags']);
-            }
-
-            $ids = get_posts(
-                    $params
-            );
-
-        } else if($type == 'pages'){
-
-            if(isset($_POST['pages'])){
-            
-                $ids = $_POST['pages'];
-            
-            } else{
-
-                $pages_ = get_pages();
-                $ids = wp_list_pluck( $pages_, 'ID' );
-            
-            }
-
+        if($tab === 'comments'){
+          include_once 'inc.php';
+          $settings_saved = handleComments();
         } else {
-            $params = array(
-		        'numberposts' => -1,
-                'post_status' => 'publish',
-		        'fields'        => 'ids',
-                'post_type' => $type
-	        );
 
-            if(isset( $_POST['tax'])){
+            // get All posts IDs
 
-                foreach($_POST['tax'] as $tax => $terms){
-                    $params['tax_query'][] = array(
-                        'taxonomy' => $tax,
-                        'field' => 'term_id',
-                        'terms' => $terms
-                    );
+            $field = $_POST['field'];
+
+            $field = $field == 'published' ? 'post_date' : 'post_modified';
+
+            $ids = array();
+
+            if ( $type == 'posts' ) {
+
+                $params = array(
+                    'numberposts' => - 1,
+                    'post_status' => 'publish',
+                    'fields'      => 'ids'
+                );
+
+                if ( isset( $_POST['categories'] ) ) {
+                    $params['cat'] = implode( ',', $_POST['categories'] );
                 }
 
-                $relation = isset( $_POST['tax_relation']) ? $_POST['tax_relation'] : 'OR';
-                $params['tax_query']['relation'] = $relation;
+                if ( isset( $_POST['tags'] ) ) {
+                    $params['tag'] = implode( ',', $_POST['tags'] );
+                }
 
-            }
-
-            // echo '<pre>';
-            // print_r($params);
-            // return;
-
-            $ids = get_posts(
+                $ids = get_posts(
                     $params
-            );
+                );
 
-            // print_r($ids);
-            // return;
-        }
+            } else if ( $type == 'pages' ) {
 
-        $from = $_POST['distribute'];
-        $to = current_time( 'timestamp', 0 );
+                if ( isset( $_POST['pages'] ) ) {
 
-        if($from == 0){
-            $range = explode( '-',$_POST['range']);
-            if(count( $range) == 2){
-                    $from = strtotime( $range[0],$now);
-                    $to = strtotime( $range[1],$now);
+                    $ids = $_POST['pages'];
+
+                } else {
+
+                    $pages_ = get_pages();
+                    $ids    = wp_list_pluck( $pages_, 'ID' );
+
+                }
+
             } else {
-                $from = strtotime( '-3 hours',$now);
+                $params = array(
+                    'numberposts' => - 1,
+                    'post_status' => 'publish',
+                    'fields'      => 'ids',
+                    'post_type'   => $type
+                );
+
+                if ( isset( $_POST['tax'] ) ) {
+
+                    foreach ( $_POST['tax'] as $tax => $terms ) {
+                        $params['tax_query'][] = array(
+                            'taxonomy' => $tax,
+                            'field'    => 'term_id',
+                            'terms'    => $terms
+                        );
+                    }
+
+                    $relation                        = isset( $_POST['tax_relation'] ) ? $_POST['tax_relation'] : 'OR';
+                    $params['tax_query']['relation'] = $relation;
+
+                }
+
+                // echo '<pre>';
+                // print_r($params);
+                // return;
+
+                $ids = get_posts(
+                    $params
+                );
+
+                // print_r($ids);
+                // return;
             }
-        }
 
-        foreach($ids as $id){
+            $from = $_POST['distribute'];
+            $to   = current_time( 'timestamp', 0 );
 
-            //TODO Get Last modified and published date and never backdate modified date
-	        $time = rand($from,$to);
-            $time = date("Y-m-d H:i:s",$time);
+            if ( $from == 0 ) {
+                $range = explode( '-', $_POST['range'] );
+                if ( count( $range ) == 2 ) {
+                    $from = strtotime( $range[0], $now );
+                    $to   = strtotime( $range[1], $now );
+                } else {
+                    $from = strtotime( '-3 hours', $now );
+                }
+            }
 
-            $wpdb->query(
-                $wpdb->prepare(
-                    "UPDATE $wpdb->posts SET $field ='%s', {$field}_gmt='%s' WHERE ID = %d",
-                     $time,
-                     get_gmt_from_date($time),
-                     $id
+            foreach ( $ids as $id ) {
+
+                //TODO Get Last modified and published date and never backdate modified date
+                $time = rand( $from, $to );
+                $time = date( "Y-m-d H:i:s", $time );
+
+                $wpdb->query(
+                    $wpdb->prepare(
+                        "UPDATE $wpdb->posts SET $field ='%s', {$field}_gmt='%s' WHERE ID = %d",
+                        $time,
+                        get_gmt_from_date( $time ),
+                        $id
                     )
                 );
+            }
+            $settings_saved = count( $ids );
         }
-        $settings_saved = count($ids);
 	}
 
 	wp_enqueue_script('momentjs','https://cdn.jsdelivr.net/momentjs/latest/moment.min.js');
@@ -220,6 +229,7 @@ function bulk_post_update_date_options() {
             }
 
             ?>
+            <a href="?page=bulk-post-update-date&tab=comments" class="nav-tab <?php echo $tab =='comments' ? 'nav-tab-active' : ''; ?>"> <span class="dashicons dashicons-admin-comments" style="padding-top: 2px;"></span> <?php _e( 'Post Comments' ) ?></a>
         
         </h2>
 
@@ -265,7 +275,7 @@ function bulk_post_update_date_options() {
                 include_once "$tab.php";
 
                 ?>
-
+                    <?php if($tab !== 'comments') : ?>
                     <tr id="field_row" valign="top" >
                     <th scope="row"><label for="field"><?php _e( 'Date field to update', 'bulk-post-update-date' ); ?></label></th>
                     <td>
@@ -281,6 +291,7 @@ function bulk_post_update_date_options() {
                         </p>
                     </td>
                 </tr>
+                <?php endif; ?>
 
             </table>
 
