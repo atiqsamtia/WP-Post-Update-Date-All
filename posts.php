@@ -24,6 +24,11 @@
                     </td>
                 </tr>
 
+                <?php
+//                Do not show tags option if there are more than 500 tags to save memory
+                    $total_tags = wp_count_terms( 'post_tag' );
+                    if ( $total_tags < 500 ) :
+                ?>
                 <tr valign="top">
                     <th scope="row"><label for="tags"><?php _e( 'Select Tags', 'bulk-post-update-date' ); ?></label></th>
                     <td>
@@ -48,3 +53,4 @@
                         </p>
                     </td>
                 </tr>
+                <?php endif; ?>
