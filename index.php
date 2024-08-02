@@ -60,8 +60,9 @@ function bulk_post_update_date_options() {
             // get All posts IDs
 
             $field = $_POST['field'];
-
-            $field = $field == 'published' ? 'post_date' : 'post_modified';
+            if($field !== 'date_both') {
+	            $field = $field == 'published' ? 'post_date' : 'post_modified';
+            }
 
             $ids = array();
 
@@ -151,15 +152,29 @@ function bulk_post_update_date_options() {
                 //TODO Get Last modified and published date and never backdate modified date
                 $time = rand( $from, $to );
                 $time = date( "Y-m-d H:i:s", $time );
+                $time_gmt = get_gmt_from_date( $time );
 
-                $wpdb->query(
-                    $wpdb->prepare(
-                        "UPDATE $wpdb->posts SET $field ='%s', {$field}_gmt='%s' WHERE ID = %d",
-                        $time,
-                        get_gmt_from_date( $time ),
-                        $id
-                    )
-                );
+                if($field === 'date_both'){
+                    $wpdb->query(
+                        $wpdb->prepare(
+                            "UPDATE $wpdb->posts SET post_date ='%s', post_date_gmt='%s', post_modified ='%s', post_modified_gmt='%s' WHERE ID = %d",
+                            $time,
+                            $time_gmt,
+                            $time,
+                            $time_gmt,
+                            $id
+                        )
+                    );
+                } else {
+	                $wpdb->query(
+		                $wpdb->prepare(
+			                "UPDATE $wpdb->posts SET $field ='%s', {$field}_gmt='%s' WHERE ID = %d",
+			                $time,
+			                $time_gmt,
+			                $id
+		                )
+	                );
+                }
             }
             $settings_saved = count( $ids );
         }
@@ -285,6 +300,9 @@ function bulk_post_update_date_options() {
                         
                         <input type="radio" id="modified" name="field" value="modified" checked>
                         <label for="modified"><?php _e( 'Modified Date', 'bulk-post-update-date' ); ?></label>
+
+                        <input type="radio" id="date_both" name="field" value="date_both">
+                        <label for="date_both"><?php _e( 'Both Dates Equal', 'bulk-post-update-date' ); ?></label>
 
                         <p class="description">
                         <?php _e( 'Updating modified date is recommended.', 'bulk-post-update-date' ); ?>
